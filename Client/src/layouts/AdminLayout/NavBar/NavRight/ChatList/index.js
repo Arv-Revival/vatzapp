@@ -1,0 +1,63 @@
+import React, { useRef, useState } from "react";
+import { FormControl } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import PerfectScrollbar from "react-perfect-scrollbar";
+
+import Friends from "./Friends";
+
+const ChatList = ({ listOpen, closed }) => {
+  const searchTextBox = useRef();
+  const [searchKeyText, setsearchKeyText] = useState("");
+  const friendsListRef = useRef();
+
+  let listClass = ["header-user-list"];
+  if (listOpen) {
+    listClass = [...listClass, "open"];
+  }
+
+  return (
+    <React.Fragment>
+      <div className={listClass.join(" ")}>
+        <div className="h-list-header d-flex align-items-center">
+          <div className="input-group">
+            <FormControl
+              type="text"
+              id="search-friends"
+              placeholder="Search Friend..."
+              ref={searchTextBox}
+              onChange={(e) => {
+                setsearchKeyText(e.target.value);
+              }}
+            />
+          </div>
+          <Link
+            to="#"
+            className="p-2"
+            onClick={friendsListRef.current?.refreshList}>
+            <i className="feather icon-refresh-cw text-primary" />
+          </Link>
+        </div>
+        <div className="h-list-body">
+          <Link to="#" className="h-close-text" onClick={closed}>
+            <i className="feather icon-chevrons-right" />
+          </Link>
+          <div className="main-friend-cont scroll-div">
+            <div
+              className="main-friend-list"
+              style={{ height: "calc(100vh - 85px)" }}>
+              <PerfectScrollbar>
+                <Friends
+                  listOpen={listOpen}
+                  searchKey={searchKeyText}
+                  ref={friendsListRef}
+                />
+              </PerfectScrollbar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default ChatList;
