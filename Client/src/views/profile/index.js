@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Dropdown, Modal} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Dropdown, Modal } from "react-bootstrap";
 import moment from "moment";
 
-import {callApi} from "../../services/apiService";
-import {showNotification} from "../../services/toasterService";
-import {CONFIG} from "../../config/constant";
-import {userRoles} from "../../enums/UserRoles";
-import {ApiConstants} from "../../config/apiConstants";
+import { callApi } from "../../services/apiService";
+import { showNotification } from "../../services/toasterService";
+import { CONFIG } from "../../config/constant";
+import { userRoles } from "../../enums/UserRoles";
+import { ApiConstants } from "../../config/apiConstants";
 import Spinner from "../../components/Spinner";
 import PlanHistory from "./PlanHistory";
 import AdminForm from "./forms/adminForm";
@@ -26,7 +26,7 @@ const Profile = (props) => {
 	const [selectedPreview, setselectedPreview] = useState(null);
 
 	useEffect(() => {
-		let userObj = JSON.parse(sessionStorage.getItem("user"));
+		let userObj = JSON.parse(localStorage.getItem("user"));
 		setuserData(userObj);
 		getProfileData();
 	}, []);
@@ -344,7 +344,7 @@ const Profile = (props) => {
 											</Col>
 											<Col sm={3}>
 												<div>
-													<div className="text-primary mb-2" style={{marginTop: 37}}>
+													<div className="text-primary mb-2" style={{ marginTop: 37 }}>
 														Contact Number
 													</div>
 													<div>
@@ -502,7 +502,7 @@ const Profile = (props) => {
 					<Row>
 						<Col sm={12}>
 							<div className="text-center px-4 py-5">
-								<img src={selectedPreview} alt="Preview" style={{maxWidth: 500}} />
+								<img src={selectedPreview} alt="Preview" style={{ maxWidth: 500 }} />
 							</div>
 						</Col>
 					</Row>
@@ -512,7 +512,7 @@ const Profile = (props) => {
 	);
 };
 
-const optionToggle = React.forwardRef(({children, onClick}, ref) => (
+const optionToggle = React.forwardRef(({ children, onClick }, ref) => (
 	<button
 		ref={ref}
 		onClick={(e) => {

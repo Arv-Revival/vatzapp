@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Accordion, Card, ListGroup, Button} from "react-bootstrap";
-import {Grid, GridColumn as Column} from "@progress/kendo-react-grid";
-import {process} from "@progress/kendo-data-query";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Accordion, Card, ListGroup, Button } from "react-bootstrap";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
+import { process } from "@progress/kendo-data-query";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import {FaAngleDown} from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 
-import {callApi} from "../../../services/apiService";
-import {showNotification} from "../../../services/toasterService";
-import {ApiConstants} from "../../../config/apiConstants";
+import { callApi } from "../../../services/apiService";
+import { showNotification } from "../../../services/toasterService";
+import { ApiConstants } from "../../../config/apiConstants";
 import Spinner from "../../../components/Spinner";
 
 const ExpenditureReport = (props) => {
@@ -16,13 +16,13 @@ const ExpenditureReport = (props) => {
 	const [reportList, setreportList] = useState([]);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
-	const userObj = JSON.parse(sessionStorage.getItem("user"));
-	const [gridState, setgridState] = useState({skip: 0, take: 10});
+	const userObj = JSON.parse(localStorage.getItem("user"));
+	const [gridState, setgridState] = useState({ skip: 0, take: 10 });
 	const [reportGridData, setreportGridData] = useState(null);
 	const [accordionList, setAccordionList] = useState([]);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-	const pagerSettings = {buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true};
+	const pagerSettings = { buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true };
 	const getReports = () => {
 		setShowLoader(true);
 		callApi("get", ApiConstants.expenditure.clientexpenditurereport, {}, true)
@@ -51,23 +51,23 @@ const ExpenditureReport = (props) => {
 		setreportGridData(process(reportList, gridState));
 	}, [reportList, gridState]);
 
-	const pageChange = (event) => setgridState({...gridState, skip: event.page.skip, take: event.page.take});
-	const filterChange = (event) => setgridState({...gridState, filter: event.filter});
+	const pageChange = (event) => setgridState({ ...gridState, skip: event.page.skip, take: event.page.take });
+	const filterChange = (event) => setgridState({ ...gridState, filter: event.filter });
 
 	const onSearchFilter = () => {
 		let dateFilters = [];
 		if (startDate) {
-			dateFilters.push({field: "invoice_number", operator: "gte", value: moment(startDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_number", operator: "gte", value: moment(startDate).format("YYYY-MM-DD") });
 		}
 		if (endDate) {
-			dateFilters.push({field: "invoice_number", operator: "lte", value: moment(endDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_number", operator: "lte", value: moment(endDate).format("YYYY-MM-DD") });
 		}
-		let updatedState = {...gridState, filter: {logic: "and", filters: dateFilters}};
+		let updatedState = { ...gridState, filter: { logic: "and", filters: dateFilters } };
 		setgridState(updatedState);
 	};
 
 	const resetFilters = () => {
-		let updatedState = {...gridState, filter: null};
+		let updatedState = { ...gridState, filter: null };
 		setgridState(updatedState);
 		setStartDate(null);
 		setEndDate(null);
@@ -140,10 +140,10 @@ const ExpenditureReport = (props) => {
 										{accordionList &&
 											accordionList.length > 0 &&
 											accordionList.map((row) => (
-												<Card key={row.id} style={{marginBottom: 4}}>
-													<Accordion.Toggle as={Card.Header} style={{backgroundColor: "#7599b1"}} eventKey={row.id}>
-														<div style={{display: "flex", justifyContent: "space-between"}}>
-															<span style={{display: "flex", alignItems: "center", color: "#ffffff", fontSize: 18}}>{row.invoice_date}</span>
+												<Card key={row.id} style={{ marginBottom: 4 }}>
+													<Accordion.Toggle as={Card.Header} style={{ backgroundColor: "#7599b1" }} eventKey={row.id}>
+														<div style={{ display: "flex", justifyContent: "space-between" }}>
+															<span style={{ display: "flex", alignItems: "center", color: "#ffffff", fontSize: 18 }}>{row.invoice_date}</span>
 															<Button variant="outline-light" size="sm">
 																<FaAngleDown />
 															</Button>
@@ -153,27 +153,27 @@ const ExpenditureReport = (props) => {
 														<Card.Body>
 															<ListGroup>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Invoice Date:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Invoice Date:</span>
 																	<span>{moment(row.invoice_date).format("DD-MMM-YYYY")}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Invoice Number:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Invoice Number:</span>
 																	<span>{row.invoice_number}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Group:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Group:</span>
 																	<span>{row.group}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Sub Group:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Sub Group:</span>
 																	<span>{row.sub_group}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Item:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Item:</span>
 																	<span>{row.item}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Total:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Total:</span>
 																	<span>{row.amount}</span>
 																</ListGroup.Item>
 															</ListGroup>

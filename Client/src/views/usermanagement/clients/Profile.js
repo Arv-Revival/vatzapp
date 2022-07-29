@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Dropdown, Modal} from "react-bootstrap";
-import {useParams, Link} from "react-router-dom";
-import {Formik, Form, ErrorMessage} from "formik";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Dropdown, Modal } from "react-bootstrap";
+import { useParams, Link } from "react-router-dom";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
 import moment from "moment";
-import {Switch} from "@progress/kendo-react-inputs";
+import { Switch } from "@progress/kendo-react-inputs";
 import DatePicker from "react-datepicker";
-import {callApi} from "../../../services/apiService";
-import {showNotification} from "../../../services/toasterService";
-import {CONFIG} from "../../../config/constant";
-import {ApiConstants} from "../../../config/apiConstants";
+import { callApi } from "../../../services/apiService";
+import { showNotification } from "../../../services/toasterService";
+import { CONFIG } from "../../../config/constant";
+import { ApiConstants } from "../../../config/apiConstants";
 import Spinner from "../../../components/Spinner";
 import AddNewPlan from "./AddPlan";
 import PlanHistory from "./PlanHistory";
-import {vatPeriods, vatPercentages, vatMonths} from "../../../enums/vatOptions";
+import { vatPeriods, vatPercentages, vatMonths } from "../../../enums/vatOptions";
 
 import avatar1 from "../../../assets/images/icons/company.png";
 import axios from "axios";
@@ -31,9 +31,9 @@ const UserProfile = () => {
 	const [showStatusConfirm, setStatusConfirm] = React.useState(false);
 	const [showPreview, setshowPreview] = useState(false);
 	const [selectedPreview, setselectedPreview] = useState(null);
-	const userObj = React.useRef(JSON.parse(sessionStorage.getItem("user")));
+	const userObj = React.useRef(JSON.parse(localStorage.getItem("user")));
 	const [tradeLicenseExpiry, setTradeLicenseExpiry] = useState(null);
-	const {id} = useParams();
+	const { id } = useParams();
 
 	const UserFormSchema = Yup.object().shape({
 		checker_user_id: Yup.string().required("Please select Checker"),
@@ -80,7 +80,7 @@ const UserProfile = () => {
 				if (response && response.status_code === 200) {
 					setCheckersList(
 						response.payload?.map((i) => {
-							return {...i, value: i.id, label: i.name};
+							return { ...i, value: i.id, label: i.name };
 						})
 					);
 				} else {
@@ -95,7 +95,7 @@ const UserProfile = () => {
 
 	const getClientData = () => {
 		setShowLoader(true);
-		let params = {user_id: parseInt(id)};
+		let params = { user_id: parseInt(id) };
 		callApi("get", ApiConstants.user.getuser, params, true)
 			.then((response) => {
 				setShowLoader(false);
@@ -103,7 +103,7 @@ const UserProfile = () => {
 					let data = response.payload;
 					console.log(`${new Date(data?.client_user?.to).getUTCDate()}-${new Date(data?.client_user?.to).getUTCMonth()}-${new Date(data?.client_user?.to).getUTCFullYear()}`);
 					// console.log(new Date(data?.client_user?.to).toUTCString());
-					setclientInfo({...data, client_user_expiry: moment(`${new Date(data?.client_user?.to).getUTCDate()}-${new Date(data?.client_user?.to).getUTCMonth() + 1}-${new Date(data?.client_user?.to).getUTCFullYear()}`).format("DD-MM-YYYY")});
+					setclientInfo({ ...data, client_user_expiry: moment(`${new Date(data?.client_user?.to).getUTCDate()}-${new Date(data?.client_user?.to).getUTCMonth() + 1}-${new Date(data?.client_user?.to).getUTCFullYear()}`).format("DD-MM-YYYY") });
 					setIsApproved(data?.client_user?.verified_on);
 					let isSwitchActive = data?.is_active ? true : false;
 					setisActive(isSwitchActive);
@@ -121,9 +121,9 @@ const UserProfile = () => {
 
 	const approveUser = (e) => {
 		e.preventDefault();
-		let params = {user_id: parseInt(id), trade_license_expiry: moment(tradeLicenseExpiry).format("YYYY-MM-DD")};
+		let params = { user_id: parseInt(id), trade_license_expiry: moment(tradeLicenseExpiry).format("YYYY-MM-DD") };
 		if (userObj?.current?.token) {
-			axios({method: "POST", url: `${CONFIG.API_BASE_URL}${ApiConstants.admin.approveuser}`, data: params, headers: {Authorization: `Bearer ${userObj?.current?.token}`}})
+			axios({ method: "POST", url: `${CONFIG.API_BASE_URL}${ApiConstants.admin.approveuser}`, data: params, headers: { Authorization: `Bearer ${userObj?.current?.token}` } })
 				.then((response) => {
 					console.trace(response);
 					if (response && response.status === 200) {
@@ -146,9 +146,9 @@ const UserProfile = () => {
 	};
 	const updateTradeLicenseExpiryUser = (e) => {
 		e.preventDefault();
-		let params = {user_id: parseInt(id), trade_license_expiry: moment(tradeLicenseExpiry).format("YYYY-MM-DD")};
+		let params = { user_id: parseInt(id), trade_license_expiry: moment(tradeLicenseExpiry).format("YYYY-MM-DD") };
 		if (userObj?.current?.token) {
-			axios({method: "PUT", url: `${CONFIG.API_BASE_URL}${ApiConstants.admin.updatetradelicenseexpiry}`, data: params, headers: {Authorization: `Bearer ${userObj?.current?.token}`}})
+			axios({ method: "PUT", url: `${CONFIG.API_BASE_URL}${ApiConstants.admin.updatetradelicenseexpiry}`, data: params, headers: { Authorization: `Bearer ${userObj?.current?.token}` } })
 				.then((response) => {
 					console.trace(response);
 					if (response && response.status === 200) {
@@ -173,7 +173,7 @@ const UserProfile = () => {
 	const onActiveChange = (status) => {
 		setShowLoader(true);
 		let apiUrl = status ? ApiConstants.user.activateuser : ApiConstants.user.deactivateuser;
-		callApi("post", apiUrl, {user_id: parseInt(id)}, true)
+		callApi("post", apiUrl, { user_id: parseInt(id) }, true)
 			.then((response) => {
 				setShowLoader(false);
 				if (response && response.status_code === 200) {
@@ -390,7 +390,7 @@ const UserProfile = () => {
 										</Col>
 										<Col sm={3}>
 											<div>
-												<div className="text-primary mb-2" style={{marginTop: 37}}>
+												<div className="text-primary mb-2" style={{ marginTop: 37 }}>
 													Contact Number
 												</div>
 												<div>
@@ -455,7 +455,7 @@ const UserProfile = () => {
 									{isApproved && (
 										<Col sm={12}>
 											<div className="my-3 d-flex">
-												<label className={`m-0 font-weight-bold  ${isActive ? "text-primary" : ""}`} style={{width: 60}}>
+												<label className={`m-0 font-weight-bold  ${isActive ? "text-primary" : ""}`} style={{ width: 60 }}>
 													{isActive ? "Active" : "Inactive"}
 												</label>
 												<Switch onChange={() => setStatusConfirm(true)} checked={isActive} onLabel={""} offLabel={""} />
@@ -474,7 +474,7 @@ const UserProfile = () => {
 											}}
 											validationSchema={UserFormSchema}
 											onSubmit={(values) => onSubmit(values)}>
-											{({errors, handleChange, values}) => (
+											{({ errors, handleChange, values }) => (
 												<Form>
 													{isApproved && (
 														<Row className="mt-3">
@@ -583,17 +583,17 @@ const UserProfile = () => {
 													<Row>
 														<Col sm={12} className="text-center mt-3">
 															<Link to="../">
-																<button type="button" className="btn btn-outline-primary" style={{width: 150}}>
+																<button type="button" className="btn btn-outline-primary" style={{ width: 150 }}>
 																	Cancel
 																</button>
 															</Link>
 															{isApproved && (
-																<button type="submit" className="btn btn-primary" style={{width: 150}} onClick={() => setIsSubmitted(true)}>
+																<button type="submit" className="btn btn-primary" style={{ width: 150 }} onClick={() => setIsSubmitted(true)}>
 																	Save
 																</button>
 															)}
 															{!isApproved && (
-																<button type="button" className="btn btn-primary" style={{width: 150}} onClick={(e) => setAddTradeLicenseExpiry(true)}>
+																<button type="button" className="btn btn-primary" style={{ width: 150 }} onClick={(e) => setAddTradeLicenseExpiry(true)}>
 																	Approve
 																</button>
 															)}
@@ -666,7 +666,7 @@ const UserProfile = () => {
 										<DatePicker className="form-control mb-2" required placeholderText="Trade License Expiry Date" dateFormat="dd/MM/yyyy" selected={tradeLicenseExpiry} onChange={setTradeLicenseExpiry} />
 										<i className="feather icon-calendar"></i>
 									</div>
-									<button className="btn btn-primary" style={{width: 150}} type="submit">
+									<button className="btn btn-primary" style={{ width: 150 }} type="submit">
 										Approve
 									</button>
 								</div>
@@ -688,7 +688,7 @@ const UserProfile = () => {
 										<DatePicker className="form-control mb-2" required placeholderText="Update Trade License Expiry Date" dateFormat="dd/MM/yyyy" selected={tradeLicenseExpiry} onChange={setTradeLicenseExpiry} />
 										<i className="feather icon-calendar"></i>
 									</div>
-									<button className="btn btn-primary" style={{width: 150}} type="submit">
+									<button className="btn btn-primary" style={{ width: 150 }} type="submit">
 										Update
 									</button>
 								</div>
@@ -705,7 +705,7 @@ const UserProfile = () => {
 					<Row>
 						<Col sm={12}>
 							<div className="text-center px-4 py-5">
-								<img src={selectedPreview} alt="Preview" style={{maxWidth: "100%"}} />
+								<img src={selectedPreview} alt="Preview" style={{ maxWidth: "100%" }} />
 							</div>
 						</Col>
 					</Row>
@@ -715,7 +715,7 @@ const UserProfile = () => {
 	);
 };
 
-const optionToggle = React.forwardRef(({children, onClick}, ref) => (
+const optionToggle = React.forwardRef(({ children, onClick }, ref) => (
 	<a
 		href=""
 		ref={ref}

@@ -25,7 +25,7 @@ const FileUpload = () => {
   const SUPPORTED_FORMATS = React.useMemo(() => ["pdf", "jpg", "jpeg", "png", "doc", "docx", "jfif", "gif", "bmp"], []);
 
   useEffect(() => {
-    let userObj = JSON.parse(sessionStorage.getItem("user"));
+    let userObj = JSON.parse(localStorage.getItem("user"));
     setcheckerAssigned(userObj.is_checker_assigned);
   }, []);
 

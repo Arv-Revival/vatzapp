@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Modal, Accordion, Button, ListGroup, InputGroup, FormControl} from "react-bootstrap";
-import {Grid, GridColumn as Column} from "@progress/kendo-react-grid";
-import {process} from "@progress/kendo-data-query";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Modal, Accordion, Button, ListGroup, InputGroup, FormControl } from "react-bootstrap";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
+import { process } from "@progress/kendo-data-query";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import {FaAngleDown} from "react-icons/fa";
-import {AiOutlineReload} from "react-icons/ai";
+import { FaAngleDown } from "react-icons/fa";
+import { AiOutlineReload } from "react-icons/ai";
 
-import {callApi} from "../../../services/apiService";
-import {ApiConstants} from "../../../config/apiConstants";
-import {showNotification} from "../../../services/toasterService";
+import { callApi } from "../../../services/apiService";
+import { ApiConstants } from "../../../config/apiConstants";
+import { showNotification } from "../../../services/toasterService";
 import Spinner from "../../../components/Spinner";
 import Preview from "../../../components/Preview";
 import FileIcon from "../../../components/FileIcon";
@@ -27,13 +27,13 @@ const PendingEntries = (props) => {
 	const [accordionList, setAccordionList] = useState([]);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-	const userObj = JSON.parse(sessionStorage.getItem("user"));
-	const [gridState, setgridState] = useState({skip: 0, take: 10});
+	const userObj = JSON.parse(localStorage.getItem("user"));
+	const [gridState, setgridState] = useState({ skip: 0, take: 10 });
 	const [gridData, setgridData] = useState(null);
 	const [gridWidth, setgridWidth] = useState(1024);
 	const windowSize = useWindowSize();
 
-	const pagerSettings = {buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true};
+	const pagerSettings = { buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true };
 
 	const handleResize = React.useCallback(() => {
 		let gridContext = document.querySelector(".k-grid");
@@ -61,24 +61,24 @@ const PendingEntries = (props) => {
 		return width;
 	};
 
-	const pageChange = (event) => setgridState({...gridState, skip: event.page.skip, take: event.page.take});
+	const pageChange = (event) => setgridState({ ...gridState, skip: event.page.skip, take: event.page.take });
 
 	const onSearchFilter = () => {
 		let dateFilters = [];
 		if (startDate) {
-			dateFilters.push({field: "created_at", operator: "gte", value: moment(startDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "created_at", operator: "gte", value: moment(startDate).format("YYYY-MM-DD") });
 		}
 
 		if (endDate) {
-			dateFilters.push({field: "created_at", operator: "lte", value: moment(endDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "created_at", operator: "lte", value: moment(endDate).format("YYYY-MM-DD") });
 		}
 
-		let updatedState = {...gridState, filter: {logic: "and", filters: dateFilters}};
+		let updatedState = { ...gridState, filter: { logic: "and", filters: dateFilters } };
 		setgridState(updatedState);
 	};
 
 	const resetFilters = () => {
-		let updatedState = {...gridState, filter: null};
+		let updatedState = { ...gridState, filter: null };
 		setgridState(updatedState);
 		setStartDate(null);
 		setEndDate(null);
@@ -115,7 +115,7 @@ const PendingEntries = (props) => {
 
 	const deleteData = () => {
 		setShowLoader(true);
-		callApi("post", ApiConstants.entry.clientdeleteentry, {entry_id: selectedEntry.id}, true)
+		callApi("post", ApiConstants.entry.clientdeleteentry, { entry_id: selectedEntry.id }, true)
 			.then((response) => {
 				setShowLoader(false);
 				if (response && response.status_code === 200) {
@@ -173,7 +173,7 @@ const PendingEntries = (props) => {
 										</div>
 									)}
 								</Col>
-								<Col md={1} xl={4} style={{display: "flex", justifyContent: "flex-end"}}>
+								<Col md={1} xl={4} style={{ display: "flex", justifyContent: "flex-end" }}>
 									<Button size="sm" onClick={getData}>
 										<AiOutlineReload size={`1.8em`} />
 									</Button>
@@ -181,8 +181,8 @@ const PendingEntries = (props) => {
 							</Row>
 							{windowWidth && (
 								<Grid data={gridData} skip={gridState.skip} pageSize={gridState.take} pageable={pagerSettings} onPageChange={pageChange}>
-									<Column field="id" title="#" width="120px"  filterable={false} cell={(props) => <td>{props.dataIndex + 1}</td>} />
-									<Column field="created_at"  title="Entry Date" cell={(props) => <td>{moment(props.dataItem.created_at).format("DD-MMM-YYYY")}</td>} />
+									<Column field="id" title="#" width="120px" filterable={false} cell={(props) => <td>{props.dataIndex + 1}</td>} />
+									<Column field="created_at" title="Entry Date" cell={(props) => <td>{moment(props.dataItem.created_at).format("DD-MMM-YYYY")}</td>} />
 									{/* <Column
 										field="file_path"
 										title="Document"
@@ -251,9 +251,9 @@ const PendingEntries = (props) => {
 											{accordionList &&
 												accordionList.length > 0 &&
 												accordionList.map((row) => (
-													<Card key={row.id} style={{marginBottom: 4}}>
-														<Accordion.Toggle as={Card.Header} style={{backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px"}} eventKey={row.id}>
-															<div style={{display: "flex", justifyContent: "space-between"}}>
+													<Card key={row.id} style={{ marginBottom: 4 }}>
+														<Accordion.Toggle as={Card.Header} style={{ backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px" }} eventKey={row.id}>
+															<div style={{ display: "flex", justifyContent: "space-between" }}>
 																{moment(row.created_at).format("DD-MMM-YYYY")}
 																<Button variant="outline-light" size="sm">
 																	<FaAngleDown />
@@ -262,7 +262,7 @@ const PendingEntries = (props) => {
 														</Accordion.Toggle>
 														<Accordion.Collapse eventKey={row.id}>
 															<Card.Body>
-																<div className="action-panel" style={{dispaly: "flex", justifyContent: "flex-end", marginBottom: 16}}>
+																<div className="action-panel" style={{ dispaly: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
 																	<button type="button" className="btn btn-outline-primary" title="View" onClick={() => viewEntry(row)}>
 																		View <i className="feather icon-eye"></i>
 																	</button>
@@ -272,13 +272,13 @@ const PendingEntries = (props) => {
 																</div>
 																<ListGroup>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Entry Date:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Entry Date:</span>
 																		<span> {moment(row.created_at).format("DD-MMM-YYYY")}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Document:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Document:</span>
 																		<div>
-																			<FileIcon className="mr-2" source={row.file_path} style={{width: 25}} />
+																			<FileIcon className="mr-2" source={row.file_path} style={{ width: 25 }} />
 																			{row.file_path.split("/")[1]}
 																		</div>
 																	</ListGroup.Item>

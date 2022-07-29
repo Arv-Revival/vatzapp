@@ -1,34 +1,34 @@
-import React, {useContext, useState, useEffect} from "react";
-import {useHistory} from "react-router-dom";
-import {ListGroup, Dropdown, Media, OverlayTrigger, Popover, Button, Badge} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { ListGroup, Dropdown, Media, OverlayTrigger, Popover, Button, Badge } from "react-bootstrap";
+import { Link } from "react-router-dom";
 // import PerfectScrollbar from "react-perfect-scrollbar";
 import axios from "axios";
 import ChatList from "./ChatList";
 import moment from "moment";
-import {ConfigContext} from "../../../../contexts/ConfigContext";
-import {userRolesList} from "../../../../enums/UserRoles";
-import {callApi} from "../../../../services/apiService";
+import { ConfigContext } from "../../../../contexts/ConfigContext";
+import { userRolesList } from "../../../../enums/UserRoles";
+import { callApi } from "../../../../services/apiService";
 
-import {showNotification} from "../../../../services/toasterService";
+import { showNotification } from "../../../../services/toasterService";
 // import avatar1 from "../../../../assets/images/user/avatar-1.jpg";
 import avatar2 from "../../../../assets/images/user/avatar-2.jpg";
 // import avatar3 from "../../../../assets/images/user/avatar-3.jpg";
 // import avatar4 from "../../../../assets/images/user/avatar-4.jpg";
 
-import {CONFIG} from "../../../../config/constant";
-import {ApiConstants} from "../../../../config/apiConstants";
+import { CONFIG } from "../../../../config/constant";
+import { ApiConstants } from "../../../../config/apiConstants";
 
 const NavRight = () => {
 	const configContext = useContext(ConfigContext);
-	const {rtlLayout} = configContext.state;
+	const { rtlLayout } = configContext.state;
 
 	const [listOpen, setListOpen] = useState(false);
 	const [userName, setuserName] = useState("");
 	const [userSubscriptionExpiry, setuserSubscriptionExpiry] = useState({});
 	const [userRole, setuserRole] = useState("");
 	const [userImg, setuserImg] = useState("");
-	const userObj = React.useRef(JSON.parse(sessionStorage.getItem("user")));
+	const userObj = React.useRef(JSON.parse(localStorage.getItem("user")));
 	let history = useHistory();
 
 	const getData = React.useCallback(() => {
@@ -43,9 +43,9 @@ const NavRight = () => {
 					if (isApiMounted && response && response.status_code === 200) {
 						// console.log(new Date(new Date(response.payload?.to).getTime()).setHours(12, 50, 0, 0));
 						// console.log(new Date(new Date().getTime()).setHours(12, 50, 0, 0));
-						setuserSubscriptionExpiry({status: "Subscription Expired", color: "danger"});
+						setuserSubscriptionExpiry({ status: "Subscription Expired", color: "danger" });
 						if (new Date(new Date(response.payload?.to).getTime()).setHours(12, 50, 0, 0) === new Date(new Date().setHours(12, 50, 0, 0)).getTime()) {
-							setuserSubscriptionExpiry({status: "Subscription Expiring Today", color: "warning"});
+							setuserSubscriptionExpiry({ status: "Subscription Expiring Today", color: "warning" });
 						} else if (new Date(new Date(response.payload?.to).getTime()).setHours(12, 50, 0, 0) > new Date(new Date().setHours(12, 50, 0, 0)).getTime()) {
 							setuserSubscriptionExpiry({
 								status: `Subscription Expiring on ${moment(response.payload?.to).format("DD-MMM-YYYY")}`,
@@ -107,12 +107,12 @@ const NavRight = () => {
 					<Dropdown alignRight={!rtlLayout} className="drp-user">
 						<Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
 							<div className="pro-head header-avtr">
-								<div style={{lineHeight: "normal", marginRight: 10}}>
+								<div style={{ lineHeight: "normal", marginRight: 10 }}>
 									<div>{userName}</div>
 									<div className="avtr-user-role">{userRole}</div>
 								</div>
-								<div className="profile-avatr" style={{width: 40, height: 40}}>
-									{userImg ? <img src={CONFIG.API_BASE_URL + ApiConstants.file.view + "?file_name=" + userImg} className="display_pic" alt="User Profile" style={{width: 40, height: 40}} /> : <img src={avatar2} className="display_pic" alt="User Profile" />}
+								<div className="profile-avatr" style={{ width: 40, height: 40 }}>
+									{userImg ? <img src={CONFIG.API_BASE_URL + ApiConstants.file.view + "?file_name=" + userImg} className="display_pic" alt="User Profile" style={{ width: 40, height: 40 }} /> : <img src={avatar2} className="display_pic" alt="User Profile" />}
 								</div>
 							</div>
 						</Dropdown.Toggle>

@@ -224,6 +224,7 @@ class ExpenditureController extends Controller
                     'entries.comment',
                     'expenditures.invoice_date',
                     'expenditures.amount',
+                    'expenditures.vat_amount',
                     'expenditures.comments',
                     'expenditures.invoice_number',
                     'expenditures.invoice_group_id',

@@ -1482,6 +1482,7 @@ class EntryController extends Controller
                     'entries.id',
                     'entries.entry_type',
                     'sales.amount',
+                    'sales.vat_amount',
                     'sales.invoice_number',
                     'entries.updated_at',
                 )
@@ -1506,6 +1507,7 @@ class EntryController extends Controller
                     'entries.id',
                     'entries.entry_type',
                     'expenditures.amount',
+                    'expenditures.vat_amount',
                     'expenditures.invoice_number',
                     'entries.updated_at',
                 )
@@ -1530,6 +1532,7 @@ class EntryController extends Controller
                     'entries.entry_type',
                     'purchases.total_amount as amount',
                     'purchases.invoice_number',
+                    'purchases.vat_amount',
                     'entries.updated_at',
                 )
                 ->selectRaw('DATE(invoice_date) as invoice_date, DATE(entries.created_at) as created_at')
@@ -1813,7 +1816,15 @@ class EntryController extends Controller
                 return $this->send_error_response('The user must be validator type', 402);
 
             $pending_entries = DB::table('entries')
-                ->select('user_client.name as user_name', 'users_checker.name as checker_name',  'files.file_path', 'entries.id', 'entries.entry_type', 'entries.requested_for_delete')->selectRaw('DATE(entries.created_at) as created_at')
+                ->select(
+                    'user_client.name as user_name',
+                    'users_checker.name as checker_name',
+                    'files.file_path',
+                    'entries.id',
+                    'entries.entry_type',
+                    'entries.requested_for_delete'
+                )
+                ->selectRaw('DATE(entries.created_at) as created_at')
                 ->selectRaw('CASE WHEN sales.invoice_date is not null THEN DATE(sales.invoice_date)
                 WHEN expenditures.invoice_date is not null THEN DATE(expenditures.invoice_date)
                 WHEN purchases.invoice_date is not null THEN DATE(purchases.invoice_date)

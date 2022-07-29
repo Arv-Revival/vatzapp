@@ -20,7 +20,7 @@ const Home = (props) => {
 	const [isAuth, setisAuth] = useState(false);
 
 	useEffect(() => {
-		if (JSON.parse(sessionStorage.getItem("auth"))) {
+		if (JSON.parse(localStorage.getItem("auth"))) {
 			setisAuth(true);
 		}
 	}, []);
@@ -87,11 +87,11 @@ const Home = (props) => {
 											<p className="wow fadeInUp" data-wow-delay="0.2s">
 												Your VAT figures are now available on your smart phone screens.
 											</p>
-											{/* <Link to="/employee/signin">
+											<Link to="/employee/signin">
 												<button className="btn btn-primary mr-3" data-wow-delay="0.2s">
 													Employee Login
 												</button>
-											</Link> */}
+											</Link>
 											<button className="btn btn-secondary" onClick={openSignIn} data-wow-delay="0.2s">
 												Login
 											</button>

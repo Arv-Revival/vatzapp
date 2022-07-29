@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import {CONFIG} from "../config/constant";
-import {ApiConstants} from "../config/apiConstants";
+import { CONFIG } from "../config/constant";
+import { ApiConstants } from "../config/apiConstants";
 
 export const callApi = (method, url, params, isAuth) => {
-	let userObj = sessionStorage.getItem("user");
+	let userObj = localStorage.getItem("user");
 	let token = "";
 	if (userObj) token = JSON.parse(userObj).token;
 
@@ -28,7 +28,7 @@ export const callApi = (method, url, params, isAuth) => {
 
 	const getRefreshToken = () => {
 		return new Promise((resolve, reject) => {
-			axios({method: "get", url: CONFIG.API_BASE_URL + ApiConstants.auth.refreshtoken, headers: config.headers})
+			axios({ method: "get", url: CONFIG.API_BASE_URL + ApiConstants.auth.refreshtoken, headers: config.headers })
 				.then((response) => {
 					if (response.data) {
 						resolve(response?.data?.payload);
@@ -43,9 +43,10 @@ export const callApi = (method, url, params, isAuth) => {
 	};
 
 	const retry = (newToken, resolve, reject) => {
-		let userObj = JSON.parse(sessionStorage.getItem("user"));
+		let userObj = JSON.parse(localStorage.getItem("user"));
 		userObj.token = newToken;
 		sessionStorage.setItem("user", JSON.stringify(userObj));
+		localStorage.setItem("user", JSON.stringify(userObj));
 		axiosConfig.headers.Authorization = `Bearer ${newToken}`;
 		axios(axiosConfig)
 			.then((response) => {
@@ -64,7 +65,7 @@ export const callApi = (method, url, params, isAuth) => {
 			(error) => {
 				console.log(error);
 				if (error.response.status === 401) {
-					return {status: 401};
+					return { status: 401 };
 				} else {
 					return error;
 				}

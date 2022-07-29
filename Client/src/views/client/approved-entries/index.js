@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Modal, OverlayTrigger, Popover, Accordion, Button, ListGroup, InputGroup, FormControl} from "react-bootstrap";
-import {Grid, GridColumn as Column} from "@progress/kendo-react-grid";
-import {process} from "@progress/kendo-data-query";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Modal, OverlayTrigger, Popover, Accordion, Button, ListGroup, InputGroup, FormControl } from "react-bootstrap";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
+import { process } from "@progress/kendo-data-query";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import {FaAngleDown} from "react-icons/fa";
-import {AiOutlineReload} from "react-icons/ai";
-import {callApi} from "../../../services/apiService";
-import {ApiConstants} from "../../../config/apiConstants";
+import { FaAngleDown } from "react-icons/fa";
+import { AiOutlineReload } from "react-icons/ai";
+import { callApi } from "../../../services/apiService";
+import { ApiConstants } from "../../../config/apiConstants";
 import Spinner from "../../../components/Spinner";
 import Preview from "../../../components/Preview";
-import {showNotification} from "../../../services/toasterService";
-import {entryStatus} from "../../../enums/entryStatus";
+import { showNotification } from "../../../services/toasterService";
+import { entryStatus } from "../../../enums/entryStatus";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ApprovedEntries = (props) => {
@@ -21,14 +21,14 @@ const ApprovedEntries = (props) => {
 	const [endDate, setEndDate] = useState(null);
 	const [showPreview, setshowPreview] = useState(false);
 	const [selectedEntry, setselectedEntry] = useState(null);
-	const userObj = JSON.parse(sessionStorage.getItem("user"));
-	const [gridState, setgridState] = useState({skip: 0, take: 10});
+	const userObj = JSON.parse(localStorage.getItem("user"));
+	const [gridState, setgridState] = useState({ skip: 0, take: 10 });
 	const [gridData, setgridData] = useState(null);
 	const [accordionList, setAccordionList] = useState([]);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const [gridWidth, setgridWidth] = useState(1024);
 	const windowSize = useWindowSize();
-	const pagerSettings = {buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true};
+	const pagerSettings = { buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true };
 
 	const handleResize = React.useCallback(() => {
 		let gridContext = document.querySelector(".k-grid");
@@ -56,22 +56,22 @@ const ApprovedEntries = (props) => {
 		let width = dynamicWidth > minWidth ? dynamicWidth : minWidth;
 		return width;
 	};
-	const pageChange = (event) => setgridState({...gridState, skip: event.page.skip, take: event.page.take});
-	const filterChange = (event) => setgridState({...gridState, filter: event.filter});
+	const pageChange = (event) => setgridState({ ...gridState, skip: event.page.skip, take: event.page.take });
+	const filterChange = (event) => setgridState({ ...gridState, filter: event.filter });
 
 	const onSearchFilter = () => {
 		let dateFilters = [];
 		if (startDate) {
-			dateFilters.push({field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD") });
 		}
 		if (endDate) {
-			dateFilters.push({field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD") });
 		}
-		setgridState({...gridState, filter: {logic: "and", filters: dateFilters}});
+		setgridState({ ...gridState, filter: { logic: "and", filters: dateFilters } });
 	};
 
 	const resetFilters = () => {
-		setgridState({...gridState, filter: null});
+		setgridState({ ...gridState, filter: null });
 		setStartDate(null);
 		setEndDate(null);
 	};
@@ -141,7 +141,7 @@ const ApprovedEntries = (props) => {
 										</div>
 									)}
 								</Col>
-								<Col md={1} xl={4} style={{display: "flex", justifyContent: "flex-end"}}>
+								<Col md={1} xl={4} style={{ display: "flex", justifyContent: "flex-end" }}>
 									<Button size="sm" onClick={getData}>
 										<AiOutlineReload size={`1.8em`} />
 									</Button>
@@ -175,7 +175,7 @@ const ApprovedEntries = (props) => {
 																	</Popover.Content>
 																</Popover>
 															}>
-															<i className="feather icon-info text-primary" style={{fontSize: 16, cursor: "pointer"}}></i>
+															<i className="feather icon-info text-primary" style={{ fontSize: 16, cursor: "pointer" }}></i>
 														</OverlayTrigger>
 													)}
 												</div>
@@ -229,9 +229,9 @@ const ApprovedEntries = (props) => {
 											{accordionList &&
 												accordionList.length > 0 &&
 												accordionList.map((row) => (
-													<Card key={row.id} style={{marginBottom: 4}}>
-														<Accordion.Toggle as={Card.Header} style={{backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px"}} eventKey={row.id}>
-															<div style={{display: "flex", justifyContent: "space-between"}}>
+													<Card key={row.id} style={{ marginBottom: 4 }}>
+														<Accordion.Toggle as={Card.Header} style={{ backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px" }} eventKey={row.id}>
+															<div style={{ display: "flex", justifyContent: "space-between" }}>
 																{row.invoice_date}
 																<Button variant="outline-light" size="sm">
 																	<FaAngleDown />
@@ -240,26 +240,26 @@ const ApprovedEntries = (props) => {
 														</Accordion.Toggle>
 														<Accordion.Collapse eventKey={row.id}>
 															<Card.Body>
-																<div className="action-panel" style={{dispaly: "flex", justifyContent: "flex-end", marginBottom: 16}}>
+																<div className="action-panel" style={{ dispaly: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
 																	<button type="button" className="btn btn-outline-primary" title="View" onClick={() => viewEntry(row)}>
 																		View <i className="feather icon-eye"></i>
 																	</button>
 																</div>
 																<ListGroup>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Invoice Date:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Invoice Date:</span>
 																		<span> {moment(row.invoice_date).format("DD-MMM-YYYY")}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Invoice Number:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Invoice Number:</span>
 																		<span> {row.invoice_number}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Invoice Number:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Invoice Number:</span>
 																		<span> {row.amount}</span>
 																	</ListGroup.Item>
-																	<ListGroup.Item style={{display: "flex"}}>
-																		<span style={{padding: "0 16px 0 8px"}}>Status:</span>
+																	<ListGroup.Item style={{ display: "flex" }}>
+																		<span style={{ padding: "0 16px 0 8px" }}>Status:</span>
 																		<div className="d-flex align-items-center">
 																			{row.entry_status_id === entryStatus.APPROVED && <div className="text-success">Approved</div>}
 																			&nbsp;
@@ -275,7 +275,7 @@ const ApprovedEntries = (props) => {
 																							</Popover.Content>
 																						</Popover>
 																					}>
-																					<i className="feather icon-info text-primary" style={{fontSize: 16, cursor: "pointer"}}></i>
+																					<i className="feather icon-info text-primary" style={{ fontSize: 16, cursor: "pointer" }}></i>
 																				</OverlayTrigger>
 																			)}
 																		</div>

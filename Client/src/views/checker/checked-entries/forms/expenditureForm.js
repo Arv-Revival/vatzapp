@@ -43,6 +43,7 @@ const ExpenditureForm = (props) => {
     let params = { entry_id: props.entry.id };
     callApi("get", ApiConstants.expenditure.getData, params, true)
       .then((response) => {
+        console.log(response.payload);
         props.onShowLoader(false);
         if (response && response.status_code === 200) {
           setexpenditureData(response.payload);
@@ -109,6 +110,7 @@ const ExpenditureForm = (props) => {
               ? new Date(expenditureData?.invoice_date)
               : "",
             amount: expenditureData?.amount ? expenditureData?.amount : "",
+            vat_amount: expenditureData?.vat_amount ? expenditureData?.vat_amount : "",
             comments: expenditureData?.comments
               ? expenditureData?.comments
               : "",
@@ -132,9 +134,8 @@ const ExpenditureForm = (props) => {
                 <Col xs={12}>
                   <div className="date-picker-container mb-3">
                     <DatePicker
-                      className={`form-control ${
-                        errors.invoice_date && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.invoice_date && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholderText="Date"
                       dateFormat="dd/MM/yyyy"
                       disabled
@@ -164,13 +165,27 @@ const ExpenditureForm = (props) => {
                     <Field
                       type="text"
                       disabled
-                      className={`form-control ${
-                        errors.amount && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.amount && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholder="Amount"
                       name="amount"
                     />
                     <ErrorMessage name="amount">
+                      {(msg) => <div className="invalid-feedback">{msg}</div>}
+                    </ErrorMessage>
+                  </div>
+                </Col>
+                <Col xs={12}>
+                  <div className="input-group mb-3">
+                    <Field
+                      type="text"
+                      disabled
+                      className={`form-control ${errors.vat_amount && isSubmitted ? "is-invalid" : ""
+                        }`}
+                      placeholder="VAT Amount"
+                      name="vat_amount"
+                    />
+                    <ErrorMessage name="vat_amount">
                       {(msg) => <div className="invalid-feedback">{msg}</div>}
                     </ErrorMessage>
                   </div>
@@ -181,9 +196,8 @@ const ExpenditureForm = (props) => {
                     <Field
                       type="text"
                       disabled
-                      className={`form-control ${
-                        errors.comments && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.comments && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholder="Comments"
                       name="comments"
                     />
@@ -198,9 +212,8 @@ const ExpenditureForm = (props) => {
                     <Field
                       type="text"
                       disabled
-                      className={`form-control ${
-                        errors.invoice_number && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.invoice_number && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholder="Invoice Number"
                       name="invoice_number"
                     />
@@ -213,11 +226,10 @@ const ExpenditureForm = (props) => {
                 <Col xs={12}>
                   <div className="input-group mb-3">
                     <Select
-                      className={`w-100 form-control-select ${
-                        errors.invoice_group_id && isSubmitted
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`w-100 form-control-select ${errors.invoice_group_id && isSubmitted
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       classNamePrefix="select"
                       options={groupsList}
                       placeholder="Group"
@@ -236,11 +248,10 @@ const ExpenditureForm = (props) => {
                 <Col xs={12}>
                   <div className="input-group mb-3">
                     <Select
-                      className={`w-100 form-control-select ${
-                        errors.invoice_sub_group_id && isSubmitted
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`w-100 form-control-select ${errors.invoice_sub_group_id && isSubmitted
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       classNamePrefix="select"
                       options={subGroupsList}
                       placeholder="Sub Group"
@@ -259,11 +270,10 @@ const ExpenditureForm = (props) => {
                 <Col xs={12}>
                   <div className="input-group mb-3">
                     <Select
-                      className={`w-100 form-control-select ${
-                        errors.invoice_item_id && isSubmitted
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`w-100 form-control-select ${errors.invoice_item_id && isSubmitted
+                        ? "is-invalid"
+                        : ""
+                        }`}
                       classNamePrefix="select"
                       options={itemsList}
                       placeholder="Items"

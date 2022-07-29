@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Accordion, ListGroup, Button} from "react-bootstrap";
-import {Grid, GridColumn as Column} from "@progress/kendo-react-grid";
-import {process} from "@progress/kendo-data-query";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Accordion, ListGroup, Button } from "react-bootstrap";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
+import { process } from "@progress/kendo-data-query";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import {FaAngleDown} from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 
-import {callApi} from "../../../services/apiService";
-import {showNotification} from "../../../services/toasterService";
-import {ApiConstants} from "../../../config/apiConstants";
+import { callApi } from "../../../services/apiService";
+import { showNotification } from "../../../services/toasterService";
+import { ApiConstants } from "../../../config/apiConstants";
 import Spinner from "../../../components/Spinner";
 import useWindowSize from "../../../hooks/useWindowSize";
 
@@ -17,14 +17,14 @@ const SalesReport = (props) => {
 	const [reportList, setreportList] = useState([]);
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
-	const [gridState, setgridState] = useState({skip: 0, take: 10});
+	const [gridState, setgridState] = useState({ skip: 0, take: 10 });
 	const [reportGridData, setreportGridData] = useState(null);
-	const userObj = JSON.parse(sessionStorage.getItem("user"));
+	const userObj = JSON.parse(localStorage.getItem("user"));
 	const [gridWidth, setgridWidth] = useState(1024);
 	const windowSize = useWindowSize();
 	const [accordionList, setAccordionList] = useState([]);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-	const pagerSettings = {buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true};
+	const pagerSettings = { buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true };
 
 	useEffect(() => setWindowWidth(window.innerWidth > 992), []);
 	const handleResize = React.useCallback(() => {
@@ -53,23 +53,23 @@ const SalesReport = (props) => {
 		return width;
 	};
 
-	const pageChange = (event) => setgridState({...gridState, skip: event.page.skip, take: event.page.take});
-	const filterChange = (event) => setgridState({...gridState, filter: event.filter});
+	const pageChange = (event) => setgridState({ ...gridState, skip: event.page.skip, take: event.page.take });
+	const filterChange = (event) => setgridState({ ...gridState, filter: event.filter });
 
 	const onSearchFilter = () => {
 		let dateFilters = [];
 		if (startDate) {
-			dateFilters.push({field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD") });
 		}
 		if (endDate) {
-			dateFilters.push({field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD") });
 		}
-		let updatedState = {...gridState, filter: {logic: "and", filters: dateFilters}};
+		let updatedState = { ...gridState, filter: { logic: "and", filters: dateFilters } };
 		setgridState(updatedState);
 	};
 
 	const resetFilters = () => {
-		setgridState({...gridState, filter: null});
+		setgridState({ ...gridState, filter: null });
 		setStartDate(null);
 		setEndDate(null);
 	};
@@ -119,8 +119,8 @@ const SalesReport = (props) => {
 									<div className="date-picker-container">
 										<DatePicker
 											className="form-control mb-2"
-											//  minDate={startDate ? startDate : new Date(userObj?.period?.start_period_date?.date)}
-											//  maxDate={new Date(userObj?.period?.end_period_date?.date)} placeholderText="End Date" dateFormat="dd/MM/yyyy" selected={endDate} onChange={setEndDate}
+										//  minDate={startDate ? startDate : new Date(userObj?.period?.start_period_date?.date)}
+										//  maxDate={new Date(userObj?.period?.end_period_date?.date)} placeholderText="End Date" dateFormat="dd/MM/yyyy" selected={endDate} onChange={setEndDate}
 										/>
 										<i className="feather icon-calendar"></i>
 									</div>
@@ -155,10 +155,10 @@ const SalesReport = (props) => {
 										{accordionList &&
 											accordionList.length > 0 &&
 											accordionList.map((row) => (
-												<Card key={row.id} style={{marginBottom: 4}}>
-													<Accordion.Toggle as={Card.Header} style={{backgroundColor: "#7599b1"}} eventKey={row.id}>
-														<div style={{display: "flex", justifyContent: "space-between"}}>
-															<span style={{display: "flex", alignItems: "center", color: "#ffffff", fontSize: 18}}>{row.invoice_date}</span>
+												<Card key={row.id} style={{ marginBottom: 4 }}>
+													<Accordion.Toggle as={Card.Header} style={{ backgroundColor: "#7599b1" }} eventKey={row.id}>
+														<div style={{ display: "flex", justifyContent: "space-between" }}>
+															<span style={{ display: "flex", alignItems: "center", color: "#ffffff", fontSize: 18 }}>{row.invoice_date}</span>
 															<Button variant="outline-light" size="sm">
 																<FaAngleDown />
 															</Button>
@@ -168,23 +168,23 @@ const SalesReport = (props) => {
 														<Card.Body>
 															<ListGroup>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Invoice Date:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Invoice Date:</span>
 																	<span>{moment(row.invoice_date).format("DD-MMM-YYYY")}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Invoice Number:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Invoice Number:</span>
 																	<span>{row.invoice_number}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Amount Excl VAT:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Amount Excl VAT:</span>
 																	<span>{row.amount_exclude_vat}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>VAT:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>VAT:</span>
 																	<span>{row.vat_amount}</span>
 																</ListGroup.Item>
 																<ListGroup.Item>
-																	<span style={{padding: "0 16px 0 8px"}}>Total:</span>
+																	<span style={{ padding: "0 16px 0 8px" }}>Total:</span>
 																	<span>{row.amount}</span>
 																</ListGroup.Item>
 															</ListGroup>

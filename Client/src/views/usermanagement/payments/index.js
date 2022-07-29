@@ -31,7 +31,7 @@ const Payments = (props) => {
 		setWindowWidth(window.innerWidth > 992);
 	}, []);
 
-	let userObj = sessionStorage.getItem("user");
+	let userObj = localStorage.getItem("user");
 	let token = "";
 	if (userObj) token = JSON.parse(userObj).token;
 

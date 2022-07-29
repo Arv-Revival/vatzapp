@@ -16,7 +16,7 @@ const PurchaseReport = (props) => {
   const [reportList, setreportList] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const userObj = JSON.parse(sessionStorage.getItem("user"));
+  const userObj = JSON.parse(localStorage.getItem("user"));
   const [gridState, setgridState] = useState({ skip: 0, take: 10 });
   const [reportGridData, setreportGridData] = useState(null);
   const [accordionList, setAccordionList] = useState([]);
@@ -115,10 +115,10 @@ const PurchaseReport = (props) => {
                 </Col>
                 <Col xs={12} md={4} xl={3}>
                   <div className="date-picker-container">
-                    <DatePicker className="form-control mb-2" 
-	 // minDate={startDate ? startDate : new Date(userObj?.period?.start_period_date?.date)} 
-	 // maxDate={new Date(userObj?.period?.end_period_date?.date)} 
-	 placeholderText="End Date" dateFormat="dd/MM/yyyy" selected={endDate} onChange={setEndDate} />
+                    <DatePicker className="form-control mb-2"
+                      // minDate={startDate ? startDate : new Date(userObj?.period?.start_period_date?.date)} 
+                      // maxDate={new Date(userObj?.period?.end_period_date?.date)} 
+                      placeholderText="End Date" dateFormat="dd/MM/yyyy" selected={endDate} onChange={setEndDate} />
                     <i className="feather icon-calendar"></i>
                   </div>
                 </Col>

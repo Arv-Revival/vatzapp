@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Modal, Accordion, Button, ListGroup, InputGroup, FormControl} from "react-bootstrap";
-import {Grid, GridColumn as Column} from "@progress/kendo-react-grid";
-import {process} from "@progress/kendo-data-query";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Modal, Accordion, Button, ListGroup, InputGroup, FormControl } from "react-bootstrap";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
+import { process } from "@progress/kendo-data-query";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
-import {FaAngleDown} from "react-icons/fa";
-import {AiOutlineReload} from "react-icons/ai";
-import {callApi} from "../../../services/apiService";
-import {ApiConstants} from "../../../config/apiConstants";
+import { FaAngleDown } from "react-icons/fa";
+import { AiOutlineReload } from "react-icons/ai";
+import { callApi } from "../../../services/apiService";
+import { ApiConstants } from "../../../config/apiConstants";
 import Spinner from "../../../components/Spinner";
 import Preview from "../../../components/Preview";
-import {entryTypeList} from "../../../enums/entryTypeList";
-import {entryTypes} from "../../../enums/entryTypes";
-import {showNotification} from "../../../services/toasterService";
+import { entryTypeList } from "../../../enums/entryTypeList";
+import { entryTypes } from "../../../enums/entryTypes";
+import { showNotification } from "../../../services/toasterService";
 import SalesForm from "./forms/salesForm";
 import ExpenditureForm from "./forms/expenditureForm";
 import PurchaseForm from "./forms/purchaseForm";
@@ -26,7 +26,7 @@ const CheckedEntries = (props) => {
 	const [showPreview, setshowPreview] = useState(false);
 	const [selectedEntry, setselectedEntry] = useState(null);
 	const [selectedEntryType, setselectedEntryType] = useState("");
-	const [gridState, setgridState] = useState({skip: 0, take: 10});
+	const [gridState, setgridState] = useState({ skip: 0, take: 10 });
 	const [gridData, setgridData] = useState(null);
 
 	const [accordionList, setAccordionList] = useState([]);
@@ -36,35 +36,35 @@ const CheckedEntries = (props) => {
 		setWindowWidth(window.innerWidth > 992);
 	}, []);
 
-	const pagerSettings = {buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true};
+	const pagerSettings = { buttonCount: 5, info: true, type: "numeric", pageSizes: true, previousNext: true };
 
 	useEffect(() => getData(), []);
 
 	useEffect(() => setgridData(process(entriesList, gridState)), [entriesList, gridState]);
 
 	const pageChange = (event) => {
-		setgridState({...gridState, skip: event.page.skip, take: event.page.take});
+		setgridState({ ...gridState, skip: event.page.skip, take: event.page.take });
 	};
 	const filterChange = (event) => {
-		setgridState({...gridState, filter: event.filter});
+		setgridState({ ...gridState, filter: event.filter });
 	};
 
 	const onSearchFilter = () => {
 		let dateFilters = [];
 		if (startDate) {
-			dateFilters.push({field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "gte", value: moment(startDate).format("YYYY-MM-DD") });
 		}
 
 		if (endDate) {
-			dateFilters.push({field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD")});
+			dateFilters.push({ field: "invoice_date", operator: "lte", value: moment(endDate).format("YYYY-MM-DD") });
 		}
 
-		let updatedState = {...gridState, filter: {logic: "and", filters: dateFilters}};
+		let updatedState = { ...gridState, filter: { logic: "and", filters: dateFilters } };
 		setgridState(updatedState);
 	};
 
 	const resetFilters = () => {
-		let updatedState = {...gridState, filter: null};
+		let updatedState = { ...gridState, filter: null };
 		setgridState(updatedState);
 		setStartDate(null);
 		setEndDate(null);
@@ -138,7 +138,7 @@ const CheckedEntries = (props) => {
 										</div>
 									)}
 								</Col>
-								<Col md={1} xl={4} style={{display: "flex", justifyContent: "flex-end"}}>
+								<Col md={1} xl={4} style={{ display: "flex", justifyContent: "flex-end" }}>
 									<Button size="sm" onClick={getData}>
 										<AiOutlineReload size={`1.8em`} />
 									</Button>
@@ -177,6 +177,7 @@ const CheckedEntries = (props) => {
                   )}
                 /> */}
 									<Column field="amount" title="Amount" width="150px" />
+									<Column field="vat_amount" title="VAT" width="150px" />
 									<Column
 										field="entry_type"
 										title="Type"
@@ -233,9 +234,9 @@ const CheckedEntries = (props) => {
 											{accordionList &&
 												accordionList.length > 0 &&
 												accordionList.map((row) => (
-													<Card key={row.id} style={{marginBottom: 4}}>
-														<Accordion.Toggle as={Card.Header} style={{backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px"}} eventKey={row.id}>
-															<div style={{display: "flex", justifyContent: "space-between"}}>
+													<Card key={row.id} style={{ marginBottom: 4 }}>
+														<Accordion.Toggle as={Card.Header} style={{ backgroundColor: "#7599b1", color: "#ffffff", padding: "8px 16px" }} eventKey={row.id}>
+															<div style={{ display: "flex", justifyContent: "space-between" }}>
 																Client: {row.name}
 																<Button variant="outline-light" size="sm">
 																	<FaAngleDown />
@@ -244,26 +245,26 @@ const CheckedEntries = (props) => {
 														</Accordion.Toggle>
 														<Accordion.Collapse eventKey={row.id}>
 															<Card.Body>
-																<div className="action-panel" style={{dispaly: "flex", justifyContent: "flex-end", marginBottom: 16}}>
+																<div className="action-panel" style={{ dispaly: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
 																	<button type="button" className="btn btn-outline-primary" title="View" onClick={() => viewEntry(row)}>
 																		View <i className="feather icon-eye"></i>
 																	</button>
 																</div>
 																<ListGroup>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Invoice Date:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Invoice Date:</span>
 																		<span>{row.invoice_date}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Invoice Number:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Invoice Number:</span>
 																		<span>{row.invoice_number}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Amount:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Amount:</span>
 																		<span>{row.amount}</span>
 																	</ListGroup.Item>
 																	<ListGroup.Item>
-																		<span style={{padding: "0 16px 0 8px"}}>Type:</span>
+																		<span style={{ padding: "0 16px 0 8px" }}>Type:</span>
 																		<span>{row.entry_type === entryTypes.SALE ? "Sales" : row.entry_type === entryTypes.PURCHASE ? "Purchase" : row.entry_type === entryTypes.EXPENDITURE ? "Expenditure" : ""}</span>
 																	</ListGroup.Item>
 																</ListGroup>
@@ -288,7 +289,7 @@ const CheckedEntries = (props) => {
 					<div className="px-4 py-5">
 						<Row>
 							<Col className={selectedEntryType === entryTypes.PURCHASE ? "col-lg-4" : "col-lg-6"}>
-								<Preview source={selectedEntry?.file_path} containerStyles={{backgroundColor: "#f5f5f5", padding: 10}} zoom={true} />
+								<Preview source={selectedEntry?.file_path} containerStyles={{ backgroundColor: "#f5f5f5", padding: 10 }} zoom={true} />
 							</Col>
 							<Col className={selectedEntryType === entryTypes.PURCHASE ? "col-lg-8" : "col-lg-6"}>
 								<Row>

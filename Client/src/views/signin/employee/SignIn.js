@@ -28,6 +28,8 @@ const SignIn = ({ history }) => {
           let userObj = response.payload;
           sessionStorage.setItem("auth", true);
           sessionStorage.setItem("user", JSON.stringify(response.payload));
+          localStorage.setItem("auth", true);
+          localStorage.setItem("user", JSON.stringify(response.payload));
           switch (userObj.user_role_id) {
             case 1:
               redirectRoute = "/admin/dashboard";
@@ -92,9 +94,8 @@ const SignIn = ({ history }) => {
                   <div className="input-group mb-3">
                     <Field
                       type="text"
-                      className={`form-control ${
-                        errors.email && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.email && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholder="Email"
                       name="email"
                       tabIndex={1}
@@ -106,9 +107,8 @@ const SignIn = ({ history }) => {
                   <div className="input-group mb-3">
                     <Field
                       type="password"
-                      className={`form-control ${
-                        errors.password && isSubmitted ? "is-invalid" : ""
-                      }`}
+                      className={`form-control ${errors.password && isSubmitted ? "is-invalid" : ""
+                        }`}
                       placeholder="Password"
                       name="password"
                       tabIndex={1}

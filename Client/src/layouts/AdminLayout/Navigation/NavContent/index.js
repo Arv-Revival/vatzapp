@@ -51,7 +51,7 @@ const NavContent = ({ navigation }) => {
   };
 
   const navItems = navigation.map((item) => {
-    const userObj = JSON.parse(sessionStorage.getItem("user"));
+    const userObj = JSON.parse(localStorage.getItem("user"));
     switch (item.type) {
       case "group":
         if (userObj?.user_role_id === item.userRole)

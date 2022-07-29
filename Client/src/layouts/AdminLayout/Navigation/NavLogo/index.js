@@ -15,7 +15,7 @@ const NavLogo = () => {
   const [userRole, setuserRole] = useState(0);
 
   useEffect(() => {
-    let userObj = JSON.parse(sessionStorage.getItem("user"));
+    let userObj = JSON.parse(localStorage.getItem("user"));
     setuserRole(userObj.user_role_id);
   }, []);
 

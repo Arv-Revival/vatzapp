@@ -26,6 +26,8 @@ const SignIn = ({ history, close, openSignup }) => {
         if (response && response.status_code === 200) {
           sessionStorage.setItem("auth", true);
           sessionStorage.setItem("user", JSON.stringify(response.payload));
+          localStorage.setItem("auth", true);
+          localStorage.setItem("user", JSON.stringify(response.payload));
           history.push("/dashboard");
         } else if (response && response.status_code === 403) {
           resendMail(values.email);
@@ -102,9 +104,8 @@ const SignIn = ({ history, close, openSignup }) => {
                     <div className="input-group mb-3">
                       <Field
                         type="text"
-                        className={`form-control ${
-                          errors.email && isSubmitted ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.email && isSubmitted ? "is-invalid" : ""
+                          }`}
                         placeholder="Email"
                         name="email"
                         tabIndex={1}
@@ -116,9 +117,8 @@ const SignIn = ({ history, close, openSignup }) => {
                     <div className="input-group mb-3">
                       <Field
                         type="password"
-                        className={`form-control ${
-                          errors.password && isSubmitted ? "is-invalid" : ""
-                        }`}
+                        className={`form-control ${errors.password && isSubmitted ? "is-invalid" : ""
+                          }`}
                         placeholder="Password"
                         name="password"
                         tabIndex={1}
