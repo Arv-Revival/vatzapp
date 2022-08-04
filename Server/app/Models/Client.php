@@ -31,13 +31,18 @@ class Client extends Model
         'trn_number',
         'fta_email',
         'fta_password',
-
+        'verified_on',
+        'country_code',
+        'mobile',
+        'l_country_code',
+        'landline',
+        'contact_person',
+        'cp_country_code',
+        'cp_mobile',
+        'tran_certificate_id',
         'checker_user_id',
         'vat_period',
         'vat_percentage',
-        'start_month',
-        'start_year',
-
         'plan_name',
         'ref',
         'from',
@@ -47,14 +52,8 @@ class Client extends Model
         'payment_amount',
         'payment_currency',
         'payment_url',
-        'country_code',
-        'mobile',
-        'l_country_code',
-        'landline',
-        'contact_person',
-        'cp_country_code',
-        'cp_mobile',
-        'tran_certificate_id'
+        'start_month',
+        'start_year'
     ];
 
     /**

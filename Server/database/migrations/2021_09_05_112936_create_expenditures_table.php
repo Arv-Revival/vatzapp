@@ -19,6 +19,7 @@ class CreateExpendituresTable extends Migration
             $table->timestamp('invoice_date');
             $table->float('amount')->default(0);
             $table->string('comments')->nullable();
+            $table->float('vat_amount')->default(0);
             $table->string('invoice_number');
             $table->unsignedBigInteger('invoice_group_id')->nullable();
             $table->unsignedBigInteger('invoice_sub_group_id')->nullable();

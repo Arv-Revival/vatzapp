@@ -23,10 +23,11 @@ class CreatePurchaseDetailsTable extends Migration
 
             $table->float('price')->default(0);
             $table->float('qty')->default(0);
+            $table->float('vat_percentage')->default(5);
             $table->float('amount')->default(0);
 
             $table->timestamps();
-            
+
             $table->foreign('purchase_id')->references('id')->on('purchases')->onCascade('delete');
             $table->foreign('invoice_group_id')->references('id')->on('invoice_groups')->onDelete('set null');
             $table->foreign('invoice_sub_group_id')->references('id')->on('invoice_sub_groups')->onDelete('set null');

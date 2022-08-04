@@ -30,5 +30,4 @@ export const CONFIG = {
 	// API_BASE_URL: "http://vatzappapi.amisinnovations.com	", // DEV
 	// API_BASE_URL: "https://s.prod.vatzapp.amisinnovations.com", // PROD
 	// API_BASE_URL: "https://api.vatzapp.com", // PROD
-	// API_BASE_URL: "http://44.203.49.112:81", // PRODC
 };
