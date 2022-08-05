@@ -25,9 +25,9 @@ export const CONFIG = {
 	layout6Background: "linear-gradient(to right, #A445B2 0%, #D41872 52%, #FF0066 100%)", // used only for pre-layout = layout-6
 	layout6BackSize: "", // 'auto' - for background pattern, 'cover' - for background images & used only for pre-layout = layout-6
 	MAX_UPLOAD_SIZE: 50 * 1024 * 1024, // 50 MB
-	API_BASE_URL: "http://localhost:8000", // DEV÷
+	// API_BASE_URL: "http://localhost:8000", // DEV÷
 	// API_BASE_URL: "http://vatzapi.vatzapp.com/", // DEV
 	// API_BASE_URL: "http://vatzappapi.amisinnovations.com	", // DEV
-	// API_BASE_URL: "https://s.prod.vatzapp.amisinnovations.com", // PROD
+	API_BASE_URL: "https://s.prod.vatzapp.amisinnovations.com", // PROD
 	// API_BASE_URL: "https://api.vatzapp.com", // PROD
 };

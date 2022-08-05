@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from "react";
-import {Row, Col, Card, Button, Modal} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Row, Col, Card, Button, Modal } from "react-bootstrap";
 import moment from "moment";
 import Select from "react-select";
-import {PDFExport} from "@progress/kendo-react-pdf";
+import { PDFExport } from "@progress/kendo-react-pdf";
 
-import {callApi} from "../../services/apiService";
-import {showNotification} from "../../services/toasterService";
-import {ApiConstants} from "../../config/apiConstants";
+import { callApi } from "../../services/apiService";
+import { showNotification } from "../../services/toasterService";
+import { ApiConstants } from "../../config/apiConstants";
 import Spinner from "../../components/Spinner";
 import Report from "../../components/Report";
-
+import { GiConfirmed } from "react-icons/gi"
 import pdfIcon from "../../assets/images/icons/pdf.png";
 
 const VatReport = (props) => {
@@ -62,6 +62,30 @@ const VatReport = (props) => {
 						};
 					});
 					setclientsList(clients);
+					callApi("post", ApiConstants.vatreports.vatreportforvalidator, { client_list: clients.map(data => data.id) }, true)
+						.then((response) => {
+							setShowLoader(false);
+							console.log(response.payload);
+							if (response && response.status_code === 200) {
+								let periods = response.payload.map((i, index) => {
+									return {
+										...i,
+										doc_id: i.id,
+										id: index,
+										value: moment(i.start_date).format("DD MMM YYYY") + " - " + moment(i.end_date).format("DD MMM YYYY"),
+										label: moment(i.start_date).format("DD MMM YYYY") + " - " + moment(i.end_date).format("DD MMM YYYY"),
+									};
+								});
+								setperiodsList(periods);
+								setFilteredPeriodsList(periods);
+							} else {
+								showNotification("Error", response.message, "error");
+							}
+						})
+						.catch((error) => {
+							setShowLoader(false);
+							showNotification("Error", "Something went wrong", "error");
+						});
 				} else {
 					showNotification("Error", response.message, "error");
 				}
@@ -76,9 +100,11 @@ const VatReport = (props) => {
 		setperiodsList([]);
 		setFilteredPeriodsList([]);
 		setShowLoader(true);
-		callApi("post", ApiConstants.vatreports.vatreportforvalidator, {user_id: userId}, true)
+		console.log(clientsList.map(data => data.id));
+		callApi("post", ApiConstants.vatreports.vatreportforvalidator, { client_list: clientsList.map(data => data.id) }, true)
 			.then((response) => {
 				setShowLoader(false);
+				console.log(response.payload);
 				if (response && response.status_code === 200) {
 					let periods = response.payload.map((i, index) => {
 						return {
@@ -146,7 +172,7 @@ const VatReport = (props) => {
 		setshowPreview(false);
 	};
 	const onEntrySubmit = (status) => {
-		let params = {id: reportsData.id, status};
+		let params = { id: reportsData.id, status };
 		callApi("post", ApiConstants.vatreports.updatevatreport, params, true)
 			.then((response) => {
 				if (response && response.status_code === 201) {
@@ -196,7 +222,7 @@ const VatReport = (props) => {
 				<Col xl={12}>
 					<Card className="rounded">
 						<Card.Body className="p-4">
-							<Row className="mb-3">
+							{/* <Row className="mb-3">
 								<Col xs={12} xl={3}>
 									<div className="input-group mb-3">
 										<Select
@@ -233,26 +259,32 @@ const VatReport = (props) => {
 										</span>
 									)}
 								</Col>
-							</Row>
+							</Row> */}
 							<Row className="mt-4">
 								{filteredPeriodsList.map((item, key) => (
-									<Col xs={12} lg={3} key={key}>
-										<Card className="rounded">
-											<Card.Body className="px-4 pt-4 pb-0">
-												<div className="report-tile">
-													<img src={pdfIcon} alt="PDF" width="50" />
-													<div className="report-name mt-3">{item.company_name}</div>
-												</div>
+									<Col xs={12} key={key} className="my-2">
+										<Row>
+											<Col xs={6}>
+												<div className="report-name">{item.company_name}</div>
+											</Col>
+											<Col xs={2}>
 												<div className="report-download" onClick={() => downloadReport(item)}>
 													<i className="feather icon-download" />
 												</div>
-											</Card.Body>
-											<div className="report-tile mb-4">
-												<Button variant="primary" className="m-0" onClick={(e) => viewEntry(item)}>
-													Approve
+											</Col>
+											<Col xs={4}>
+
+												{/* <div className="report-download" onClick={(e) => viewEntry(item)}>
+												</div> */}
+												<Button variant="primary" className="m-0 p-xs-1 p-2" onClick={(e) => viewEntry(item)}>
+													<GiConfirmed /> Approve
 												</Button>
-											</div>
-										</Card>
+
+											</Col>
+										</Row>
+
+
+
 									</Col>
 								))}
 							</Row>

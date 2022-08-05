@@ -266,7 +266,7 @@ class VatReportController extends Controller
             200
         );
     }
-    
+
 
     /**
      * @OA\Post(
@@ -435,7 +435,7 @@ class VatReportController extends Controller
     {
         $validator = Validator::make(
             $request->all(),
-            ['user_id'    => 'required|numeric|min:1',]
+            ['client_list' => 'required|array']
         );
 
         if ($validator->fails()) {
@@ -443,11 +443,13 @@ class VatReportController extends Controller
             return $this->send_validation_error_response($error);
         }
 
-        $report = VatReport::select('name as company_name', 'vat_return_start_period as start_date', 'vat_return_end_period as end_date', 'id')
-            ->where('client_id', '=', $request->user_id)
-            ->where('status', '=', 'Pending')
-            ->get();
-
+        // $report = VatReport::select('name as company_name', 'vat_return_start_period as start_date', 'vat_return_end_period as end_date', 'id', 'client_id')
+        //     // ->where('client_id', '=', $request->user_id)
+        //     ->whereIn('client_id', $request->client_list)
+        //     ->where('status', '=', 'Pending')
+        //     ->get();
+        $report = VatReport::query("SELECT *  FROM prod_vatzapp.vat_reports WHERE status='Pending' AND client_id IN ?", $request->client_list)
+            ->get(["name as company_name", "vat_return_start_period as start_date", "vat_return_end_period as end_date", "id", "client_id"]);
         return $this->send_response(
             'VAT report sent.',
             $report,
